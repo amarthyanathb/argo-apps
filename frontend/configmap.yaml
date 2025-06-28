@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cybersapient-frontend-config
+  namespace: prod
+  labels:
+    app: cybersapient-frontend
+    tier: frontend
+data:
+  api-url: "https://cybersapient.int.devopsnow.io"  # Update with your backend API URL
+  node-env: "production"

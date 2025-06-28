@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cybersapient-backend-config
+  namespace: prod
+  labels:
+    app: cybersapient-backend
+    tier: backend
+data:
+  cors-origins: "http://cybersapient.int.devopsnow.io,https://cybersapient.int.devopsnow.io,http://cybersapient-frontend-service.prod.svc.cluster.local:3000"  # Updated with internal cluster service
+  flask-env: "production"
+  flask-debug: "false"
+  port: "5000"

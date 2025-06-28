@@ -1,0 +1,41 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cybersapient-frontend
+  namespace: prod
+  labels:
+    app: cybersapient-frontend
+    tier: frontend
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: cybersapient-frontend
+  template:
+    metadata:
+      labels:
+        app: cybersapient-frontend
+        tier: frontend
+    spec:
+      containers:
+      - name: frontend
+        image: amarthyanath/cybersapient-frontend:914fb72
+        ports:
+        - containerPort: 3000
+          name: http
+        env:
+        - name: REACT_APP_API_URL
+          valueFrom:
+            configMapKeyRef:
+              name: cybersapient-frontend-config
+              key: api-url
+        - name: NODE_ENV
+          value: "production"
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "10m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+      restartPolicy: Always

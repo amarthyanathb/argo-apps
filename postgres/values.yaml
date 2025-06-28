@@ -1,0 +1,22 @@
+
+global:
+  postgresql:
+    auth:
+      postgresPassword: "075mpJ4Gn6"
+      username: "cybersapient-demo"
+      password: "075mpJ4Gn6"
+      database: "cybersapient"
+postgresqlSharedPreloadLibraries: "pgaudit,pg_stat_statements"
+
+primary:
+  initdb:
+    user: "postgres"
+    scripts:
+      init_pg_stat_statements.sql: |
+        ALTER USER cybersapient-demo WITH SUPERUSER;
+  extraVolumes:
+    - name: storage
+      emptyDir:
+        sizeLimit: 10Gi
+persistence:
+  size: 8Gi

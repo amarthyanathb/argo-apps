@@ -1,0 +1,14 @@
+apiVersion: v2
+name: cybersapient-postgres
+description: PostgreSQL database for CyberSapient application
+type: application
+version: 0.1.0
+appVersion: "16.4.0"
+
+dependencies:
+  - name: postgresql
+    version: 15.5.26
+    repository: https://charts.bitnami.com/bitnami
+    condition: postgresql.enabled
+    tags:
+      - database
