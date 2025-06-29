@@ -17,6 +17,68 @@ spec:
         app: cybersapient-backend
         tier: backend
     spec:
+      initContainers:
+      - name: db-migration
+        image: postgres:15-alpine
+        env:
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: cybersapient-backend-secret
+              key: database-url
+        command:
+        - /bin/sh
+        - -c
+        - |
+          set -e
+          echo "Waiting for PostgreSQL to be ready..."
+          
+          # Extract connection details from DATABASE_URL
+          # DATABASE_URL format: postgresql://user:password@host:port/database
+          DB_HOST=$(echo $DATABASE_URL | sed -n 's/.*@\([^:]*\):.*/\1/p')
+          DB_PORT=$(echo $DATABASE_URL | sed -n 's/.*:\([0-9]*\)\/.*/\1/p')
+          DB_NAME=$(echo $DATABASE_URL | sed -n 's/.*\/\([^?]*\).*/\1/p')
+          DB_USER=$(echo $DATABASE_URL | sed -n 's/.*:\/\/\([^:]*\):.*/\1/p')
+          DB_PASSWORD=$(echo $DATABASE_URL | sed -n 's/.*:\/\/[^:]*:\([^@]*\)@.*/\1/p')
+          
+          # Set PGPASSWORD for authentication
+          export PGPASSWORD=$DB_PASSWORD
+          
+          echo "Connecting to: $DB_HOST:$DB_PORT/$DB_NAME as $DB_USER"
+          
+          # Wait for PostgreSQL to be ready
+          until pg_isready -h $DB_HOST -p $DB_PORT -U $DB_USER; do
+            echo "PostgreSQL is unavailable - sleeping"
+            sleep 2
+          done
+          
+          echo "PostgreSQL is ready!"
+          
+          # Check if demo_request table exists, if not create it
+          TABLE_EXISTS=$(psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME -tAc "SELECT EXISTS (SELECT FROM information_schema.tables WHERE table_schema='public' AND table_name='demo_request');")
+          
+          if [ "$TABLE_EXISTS" = "f" ]; then
+            echo "Creating demo_request table..."
+            psql -h $DB_HOST -p $DB_PORT -U $DB_USER -d $DB_NAME <<EOF
+          CREATE TABLE IF NOT EXISTS demo_request (
+              id SERIAL PRIMARY KEY,
+              email VARCHAR(120) NOT NULL,
+              company_name VARCHAR(100) NOT NULL,
+              username VARCHAR(80) NOT NULL,
+              message TEXT,
+              created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+          );
+          
+          -- Grant permissions to ensure the app can access the table
+          GRANT ALL PRIVILEGES ON TABLE demo_request TO "cybersapient-demo";
+          GRANT USAGE, SELECT ON SEQUENCE demo_request_id_seq TO "cybersapient-demo";
+          EOF
+            echo "demo_request table created successfully!"
+          else
+            echo "demo_request table already exists, skipping creation."
+          fi
+          
+          echo "Database initialization completed!"
       containers:
       - name: backend
         image: amarthyanath/cybersapient-backend:3340c4c
