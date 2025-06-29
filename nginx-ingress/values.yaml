@@ -11,11 +11,9 @@ ingress-nginx:
     service:
       type: LoadBalancer
       annotations:
-        service.beta.kubernetes.io/aws-load-balancer-type: nlb
         service.beta.kubernetes.io/aws-load-balancer-backend-protocol: http
         service.beta.kubernetes.io/aws-load-balancer-ssl-ports: "https"
         service.beta.kubernetes.io/aws-load-balancer-scheme: "internet-facing"
-        # service.beta.kubernetes.io/aws-load-balancer-ssl-cert: "arn:aws:acm:region:account:certificate/cert-id"
         service.beta.kubernetes.io/aws-load-balancer-internal: "false"
     affinity: 
       podAntiAffinity:

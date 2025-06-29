@@ -7,5 +7,5 @@ metadata:
     app: cybersapient-frontend
     tier: frontend
 data:
-  api-url: "https://cybersapient.duckdns.org"  # Update with your backend API URL
+  api-url: "https://cybersapient.ddns.net"  # Update with your backend API URL
   node-env: "production"
