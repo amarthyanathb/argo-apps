@@ -14,17 +14,6 @@ primary:
     scripts:
       init_pg_stat_statements.sql: |
         ALTER USER cybersapient-demo WITH SUPERUSER;
-      init_demo_request_table.sql: |
-        CREATE TABLE IF NOT EXISTS demo_request (
-          id SERIAL PRIMARY KEY,
-          email VARCHAR(120) NOT NULL,
-          company_name VARCHAR(100) NOT NULL,
-          username VARCHAR(80) NOT NULL,
-          message TEXT,
-          created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-        );
-        GRANT ALL PRIVILEGES ON TABLE demo_request TO "cybersapient-demo";
-        GRANT USAGE, SELECT ON SEQUENCE demo_request_id_seq TO "cybersapient-demo";
   extraVolumes:
     - name: storage
       emptyDir:
