@@ -20,3 +20,4 @@ primary:
         sizeLimit: 10Gi
 persistence:
   size: 8Gi
+  storageClass: gp2
