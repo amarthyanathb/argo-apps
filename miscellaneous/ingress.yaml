@@ -15,7 +15,7 @@ metadata:
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 spec:
   rules:
-  - host: cybersapient.int.devopsnow.io  # Update with your domain
+  - host: cybersapient.duckdns.org
     http:
       paths:
       # Backend API routes
