@@ -14,6 +14,10 @@ metadata:
     nginx.ingress.kubernetes.io/enable-cors: "true"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
 spec:
+  tls:
+  - hosts:
+    - cybersapient.duckdns.org
+    secretName: cybersapient-tls
   rules:
   - host: cybersapient.duckdns.org
     http:
