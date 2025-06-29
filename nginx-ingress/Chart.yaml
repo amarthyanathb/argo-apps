@@ -1,0 +1,9 @@
+
+apiVersion: v2
+name: cybersapient-ingress-nginx 
+description: NGINX Ingress Controller for CyberSapient
+version: 0.1.0
+dependencies:
+- name: ingress-nginx
+  version: 4.12.1
+  repository: https://kubernetes.github.io/ingress-nginx
