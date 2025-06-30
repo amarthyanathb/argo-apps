@@ -1,0 +1,24 @@
+apiVersion: v2
+name: watcher
+description: A comprehensive monitoring stack with Loki, Grafana, and Prometheus for cluster self-monitoring
+type: application
+version: 0.1.0
+appVersion: "1.0"
+
+dependencies:
+  - name: prometheus
+    version: "25.8.0"
+    repository: https://prometheus-community.github.io/helm-charts
+    condition: prometheus.enabled
+  - name: loki
+    version: "5.41.4"
+    repository: https://grafana.github.io/helm-charts
+    condition: loki.enabled
+  - name: grafana
+    version: "7.0.19"
+    repository: https://grafana.github.io/helm-charts
+    condition: grafana.enabled
+  - name: promtail
+    version: "6.15.3"
+    repository: https://grafana.github.io/helm-charts
+    condition: promtail.enabled
