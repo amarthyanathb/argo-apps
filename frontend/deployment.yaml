@@ -19,7 +19,7 @@ spec:
     spec:
       containers:
       - name: frontend
-        image: amarthyanath/cybersapient-frontend:45ec335
+        image: amarthyanath/cybersapient-frontend:4af4bb6
         ports:
         - containerPort: 3000
           name: http
