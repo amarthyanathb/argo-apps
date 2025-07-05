@@ -130,7 +130,7 @@ grafana:
   
   persistence:
     enabled: true
-    # storageClassName: gp2
+    storageClassName: gp2
     size: 5Gi
   
   resources:
@@ -178,21 +178,22 @@ grafana:
   
   dashboards:
     default:
+      # Set dashboard ID 15661 as the only dashboard
+      main-dashboard:
+        gnetId: 15661
+        revision: 1
+        datasource: Prometheus
+  
+  # Set default home dashboard
+  grafana.ini:
+    dashboards:
+      default_home_dashboard_path: /var/lib/grafana/dashboards/default/main-dashboard.json
+    users:
+      home_page: dashboard
       kubernetes-cluster:
         gnetId: 7249
         revision: 1
         datasource: Prometheus
-      
-      # Node exporter dashboard
-      node-exporter:
-        gnetId: 1860
-        revision: 27
-        datasource: Prometheus
-      
-      loki-logs:
-        gnetId: 13639
-        revision: 2
-        datasource: Loki
 
 promtail:
   enabled: true
